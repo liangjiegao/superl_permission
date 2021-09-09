@@ -1,23 +1,18 @@
 <?php
 
 
-namespace App\Http\Service\Cache;
+namespace  Superl\Permission;
 
 
+use App\Http\Config\RedisHeaderRulesConf;
 use Predis\Client;
 
 class PermissionCache
 {
 
     public static function getPermissionCache(string $rKey, string $compKey){
-        $redisConfig =  [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
-        ];
+        $redisConfig = config('database.redis.default');
         $redis = new Client($redisConfig);
-        return json_decode($redis->hget( 'permission' . $compKey , $rKey), true);
+        return json_decode($redis->hget( RedisHeaderRulesConf::PERMISSION . $compKey , $rKey), true);
     }
 }
