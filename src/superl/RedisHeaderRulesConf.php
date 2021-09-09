@@ -13,6 +13,7 @@ namespace Superl\Permission;
  */
 class RedisHeaderRulesConf
 {
+    const USER_TOKEN = 'user_token';
     const TOKEN_HEAD = 'token_head';  // token的前缀
     const PERMISSION = 'permission';  // 权限
     const ROLE = 'role';  // 角色

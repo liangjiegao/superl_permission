@@ -35,5 +35,11 @@ class LoginCache
 
         return CodeConf::SUCCESS;
     }
-
+    public static function getUserToken($userKey){
+        $redisConfig = config('database.redis.default');
+        $prefix = 'universal_database_';
+        $redis = new Client($redisConfig);
+        $key = $prefix . RedisHeaderRulesConf::USER_TOKEN;
+        return $redis->hget($key, $userKey);
+    }
 }
