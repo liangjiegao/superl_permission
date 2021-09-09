@@ -3,8 +3,6 @@
 
 namespace  Superl\Permission;
 
-
-use App\Http\Config\RedisHeaderRulesConf;
 use Predis\Client;
 
 class RoleCache
