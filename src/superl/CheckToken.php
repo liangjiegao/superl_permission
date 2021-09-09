@@ -28,7 +28,7 @@ class CheckToken
         // token延期
         LoginCache::resetTokenRedis($request->input('token'));
 
-        $request->user = $user;
+        $request['user'] = $user;
 
         $response = $next($request);
 
