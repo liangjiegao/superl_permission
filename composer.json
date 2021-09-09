@@ -1,0 +1,21 @@
+{
+    "name": "superl/permission",
+    "description": "@@@@@@@@",
+    "type": "1",
+    "require": {
+        "php": "^7.3"
+    },
+    "license": "Apache-2.0",
+    "autoload": {
+        "psr-4": {
+            "Superl\\Permission\\": "src/superl"
+        }
+    },
+    "authors": [
+        {
+            "name": "liangjiegao",
+            "email": "1445808283@qq.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
