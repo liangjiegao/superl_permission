@@ -26,16 +26,16 @@ class Controller extends BaseController
             $length         = $format['length'] ?? 0;
 
             // uid
-            if ($inputParam == 'uid'){
-                $result['uid'] = isset($userInfo['uid']) ? intval($userInfo['uid']) : 0;
-                $service->setUid($result['uid']);
+            if ($inputParam == 'user_key'){
+                $result['user_key'] = $userInfo['user_key'] ?? null;
+                $service->setUserKey($result['user_key']);
 
                 continue;
             }
             // comp_id
-            if ($inputParam == 'comp_id'){
-                $result['comp_id'] = isset($userInfo['comp_id']) ? intval($userInfo['comp_id']) : 0;
-                $service->setCompId($result['comp_id']);
+            if ($inputParam == 'comp_key'){
+                $result['comp_key'] = $userInfo['comp_key'] ?? null;
+                $service->setCompKey($result['comp_key']);
 
                 continue;
             }
@@ -45,10 +45,6 @@ class Controller extends BaseController
                 continue;
             }
 
-            if ($inputParam == 'user_key'){
-                $result['user_key'] = isset($userInfo['user_key']) ? $userInfo['user_key'] : '';
-                continue;
-            }
 
             $getParam = $request->input($inputParam);
 

@@ -28,9 +28,8 @@ class CodeConf
             self::PARAM_EMPTY           => '参数异常！',
 
         );
-        if (is_array($other) && count($other) > 0) {
-            return (array('code'=> $code, 'msg'=> $config[$code]) + $other);
-        }
-        return array('code'=> $code, 'msg'=> $config[$code]);
+        $msg = $config[$code] ?? null;
+
+        return (array('code'=> $code, 'msg'=> $msg) + $other);
     }
 }
