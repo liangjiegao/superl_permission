@@ -11,12 +11,20 @@ class ComposerStaticInit5833ecb6e6f570cc299861a1b0c4bd96
         array (
             'Superl\\Permission\\' => 18,
         ),
+        'P' => 
+        array (
+            'Predis\\' => 7,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'Superl\\Permission\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src/superl',
+        ),
+        'Predis\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/predis/predis/src',
         ),
     );
 

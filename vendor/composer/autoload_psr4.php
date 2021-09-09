@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Superl\\Permission\\' => array($baseDir . '/src/superl'),
+    'Predis\\' => array($vendorDir . '/predis/predis/src'),
 );
