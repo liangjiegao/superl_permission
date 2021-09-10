@@ -3,7 +3,6 @@
 
 namespace  Superl\Permission;
 
-
 use Predis\Client;
 
 class LoginCache
@@ -15,7 +14,8 @@ class LoginCache
         $redisConfig = config('database.redis.default');
         $prefix = config('database.redis.options.prefix', 'universal_database_');
         $redis = new Client($redisConfig);
-        $key = $prefix . RedisHeaderRulesConf::TOKEN_HEAD . $token;
+
+        $key = $prefix . self::getTokenHead() . $token;
         echo $key;
         return json_decode($redis->get( $key), true);
     }
@@ -28,7 +28,7 @@ class LoginCache
         $prefix = config('database.redis.options.prefix', 'universal_database_');
         $redis = new Client($redisConfig);
 
-        $tKey = $prefix . RedisHeaderRulesConf::TOKEN_HEAD . $token;
+        $tKey = $prefix . self::getTokenHead() . $token;
 
         $re = $redis->setex($tKey,  self::TOKEN_TIME, json_encode($user));
         if (!$re){
@@ -43,5 +43,18 @@ class LoginCache
         $redis = new Client($redisConfig);
         $key = $prefix . RedisHeaderRulesConf::USER_TOKEN;
         return $redis->hget($key, $userKey);
+    }
+
+    public static function getTokenHead(){
+        try {
+            $head = App\Http\Config\RedisHeaderRulesConf::getConf('userToken');
+        }catch (\Exception $e){
+
+        }
+        if (!empty($head)){
+            $head = RedisHeaderRulesConf::TOKEN_HEAD;
+        }
+
+        return $head;
     }
 }
