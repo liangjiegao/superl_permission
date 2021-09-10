@@ -4,6 +4,7 @@
 namespace  Superl\Permission;
 
 use Predis\Client;
+use App\Http\Config\RedisHeaderRulesConf as Rhfc;
 
 class LoginCache
 {
@@ -47,7 +48,7 @@ class LoginCache
 
     public static function getTokenHead(){
         try {
-            $head = app_path('Http\Config\RedisHeaderRulesConf.php')::getConf('userToken');
+            $head = Rhfc::getConf('userToken');
         }catch (\Exception $e){
 
         }
