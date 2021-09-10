@@ -15,9 +15,7 @@ class LoginCache
         $redisConfig = config('database.redis.default');
         $prefix = $redisConfig['prefix'] ?? 'universal_database_';
         $redis = new Client($redisConfig);
-
         $key = $prefix . self::getTokenHead() . $token;
-        echo $key;
         return json_decode($redis->get( $key), true);
     }
     // token延期

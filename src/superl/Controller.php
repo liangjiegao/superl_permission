@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\DB;
 
 class Controller extends BaseController
 {
@@ -14,7 +15,11 @@ class Controller extends BaseController
 
     public static function paramsFilter(array $formatList, Request $request, Service $service){
         $resultTemp = ['code' => CodeConf::SUCCESS, 'result' => []];
-        $userInfo = $request->input('user', []);
+        $userInfo = $request->input('user');
+        if (!is_array($userInfo)){
+            $userInfo = DB::table('user') -> where(['uid' => $userInfo])  -> first() ;
+            $userInfo = UtilsClass::objectToArray($userInfo);
+        }
 
         $result = [];
         foreach ($formatList as $format) {
