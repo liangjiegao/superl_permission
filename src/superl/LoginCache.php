@@ -47,7 +47,7 @@ class LoginCache
 
     public static function getTokenHead(){
         try {
-            $head = app_path('Http\Config\RedisHeaderRulesConf')::getConf('userToken');
+            $head = app_path('Http\Config\RedisHeaderRulesConf.php')::getConf('userToken');
         }catch (\Exception $e){
 
         }
