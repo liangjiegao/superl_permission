@@ -13,7 +13,7 @@ class LoginCache
     // 获取用户信息
     public static function getUserByUserToken($token){
         $redisConfig = config('database.redis.default');
-        $prefix = 'universal_database_';
+        $prefix = config('database.redis.options.prefix', 'universal_database_');
         $redis = new Client($redisConfig);
         return json_decode($redis->get( $prefix . RedisHeaderRulesConf::TOKEN_HEAD . $token), true);
     }
@@ -23,7 +23,7 @@ class LoginCache
         $user = self::getUserByUserToken($token);
 
         $redisConfig = config('database.redis.default');
-        $prefix = 'universal_database_';
+        $prefix = config('database.redis.options.prefix', 'universal_database_');
         $redis = new Client($redisConfig);
 
         $tKey = $prefix . RedisHeaderRulesConf::TOKEN_HEAD . $token;
@@ -37,7 +37,7 @@ class LoginCache
     }
     public static function getUserToken($userKey){
         $redisConfig = config('database.redis.default');
-        $prefix = 'universal_database_';
+        $prefix = config('database.redis.options.prefix', 'universal_database_');
         $redis = new Client($redisConfig);
         $key = $prefix . RedisHeaderRulesConf::USER_TOKEN;
         return $redis->hget($key, $userKey);
