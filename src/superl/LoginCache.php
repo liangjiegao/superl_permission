@@ -16,6 +16,7 @@ class LoginCache
         $prefix = config('database.redis.options.prefix', 'universal_database_');
         $redis = new Client($redisConfig);
         $key = $prefix . RedisHeaderRulesConf::TOKEN_HEAD . $token;
+        echo $key;
         return json_decode($redis->get( $key), true);
     }
     // token延期
