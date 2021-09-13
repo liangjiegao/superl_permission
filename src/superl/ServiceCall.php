@@ -6,14 +6,17 @@ namespace Superl\Permission;
 class ServiceCall
 {
 
-    protected $token;
     protected $params;
 
 
-    public function __construct($userKey, $params){
-        $this->token = LoginCache::getUserToken($userKey);
-        $this->params = $params;
-        $this->params['token'] = $this->token;
+//    public function __construct($userKey, $params){
+//        $this->token = LoginCache::getUserToken($userKey);
+//        $this->params = $params;
+//        $this->params['token'] = $this->token;
+//    }
+
+    public function __construct(){
+
     }
 
     public function post(){
@@ -31,4 +34,7 @@ class ServiceCall
         return $response;
     }
 
+    public function setParams(array $params){
+        $this->params = $params;
+    }
 }
