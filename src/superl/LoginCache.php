@@ -24,7 +24,7 @@ class LoginCache
         $user = self::getUserByUserToken($token);
 
         $redisConfig = config('database.redis.default');
-        $prefix = empty($redisConfig['prefix']) ?? 'universal_database_';
+        $prefix = $redisConfig['prefix'] ?? 'universal_database_';
         $redis = new Client($redisConfig);
 
         $tKey = $prefix . self::getTokenHead() . $token;
@@ -38,7 +38,7 @@ class LoginCache
     }
     public static function getUserToken($userKey){
         $redisConfig = config('database.redis.default');
-        $prefix = empty($redisConfig['prefix']) ?? 'universal_database_';
+        $prefix = $redisConfig['prefix'] ?? 'universal_database_';
         $redis = new Client($redisConfig);
         $key = $prefix . RedisHeaderRulesConf::USER_TOKEN;
         return $redis->hget($key, $userKey);
