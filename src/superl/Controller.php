@@ -43,7 +43,7 @@ class Controller extends BaseController
                 continue;
             }
             // comp_id
-            if ($inputParam == 'comp_uid'){
+            if ($inputParam == 'comp_id'){
                 $result['comp_uid'] = $userInfo['comp_uid'] ?? null;
 
                 continue;
