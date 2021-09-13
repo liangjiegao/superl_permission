@@ -6,8 +6,8 @@ namespace Superl\Permission;
 class ServiceCall
 {
 
-    private $token;
-    private $params;
+    protected $token;
+    protected $params;
 
 
     public function __construct($userKey, $params){
