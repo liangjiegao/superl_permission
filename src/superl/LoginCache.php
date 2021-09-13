@@ -40,7 +40,7 @@ class LoginCache
         $redisConfig = config('database.redis.default');
         $prefix = $redisConfig['prefix'] ?? 'universal_database_';
         $redis = new Client($redisConfig);
-        $key = $prefix . RedisHeaderRulesConf::USER_TOKEN;
+        $key = $prefix . self::getUserTokenHead();
         return $redis->hget($key, $userKey);
     }
 
@@ -56,4 +56,17 @@ class LoginCache
 
         return $head;
     }
+    public static function getUserTokenHead(){
+        try {
+            $head = Rhfc::getConf('user_uid_token');
+        }catch (\Exception $e){
+
+        }
+        if (empty($head)){
+            $head = RedisHeaderRulesConf::USER_TOKEN;
+        }
+
+        return $head;
+    }
+
 }
