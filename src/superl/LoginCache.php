@@ -3,7 +3,6 @@
 
 namespace  Superl\Permission;
 
-use http\Env;
 use Predis\Client;
 use App\Http\Config\RedisHeaderRulesConf as Rhfc;
 
@@ -13,8 +12,8 @@ class LoginCache
 
     // 获取用户信息
     public static function getUserByUserToken($token){
-        $redisConfig = config('database.redis.default');
-        $prefix = env('prefix', null) ?? 'universal_database_';
+        $redisConfig = self::getEnv($token);
+        $prefix = $redisConfig['prefix'];
         $redis = new Client($redisConfig);
         $key = $prefix . self::getTokenHead() . $token;
         return json_decode($redis->get( $key), true);
@@ -24,8 +23,8 @@ class LoginCache
         // 获取uid
         $user = self::getUserByUserToken($token);
 
-        $redisConfig = config('database.redis.default');
-        $prefix = env('prefix', null) ?? 'universal_database_';
+        $redisConfig = self::getEnv($token);
+        $prefix = $redisConfig['prefix'];
         $redis = new Client($redisConfig);
 
         $tKey = $prefix . self::getTokenHead() . $token;
@@ -38,8 +37,8 @@ class LoginCache
         return CodeConf::SUCCESS;
     }
     public static function getUserToken($userKey){
-        $redisConfig = config('database.redis.default');
-        $prefix = env('prefix', null) ?? 'universal_database_';
+        $redisConfig = self::getEnv($token);
+        $prefix = $redisConfig['prefix'];
         $redis = new Client($redisConfig);
         $key = $prefix . self::getUserTokenHead();
         return $redis->hget($key, $userKey);
@@ -69,5 +68,30 @@ class LoginCache
 
         return $head;
     }
+    private static function getEnv($token){
+        $data = [
+            'prefix' => 'universal_database_',
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ];
 
+        $list = explode('_', $token);
+        if (count($list) === 1){
+            return $data;
+        }
+        if ($list[0] === 'mc'){
+            $data = [
+                'prefix' => 'yiyu_mc_php_database_mcgl_',
+                'host' => env('MC_REDIS_HOST', '127.0.0.1'),
+                'password' => env('MC_REDIS_PASSWORD', null),
+                'port' => env('MC_REDIS_PORT', '6379'),
+                'database' => env('REDIS_DB', '0'),
+            ];
+        }
+
+        return $data;
+    }
 }
