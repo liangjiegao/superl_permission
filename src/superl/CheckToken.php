@@ -56,6 +56,7 @@ class CheckToken
                 'REDIS_HOST'=> '42.192.223.252',
                 'REDIS_PORT'=>'6379',
                 'REDIS_PASSWORD' => '66gJYuyi66',
+                'prefix'    => 'yiyu_mc_php_database_mcgl_'
             ];
             // 使用函数更新
             UtilsClass::modifyEnv($data);

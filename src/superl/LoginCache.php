@@ -3,6 +3,7 @@
 
 namespace  Superl\Permission;
 
+use http\Env;
 use Predis\Client;
 use App\Http\Config\RedisHeaderRulesConf as Rhfc;
 
@@ -13,7 +14,7 @@ class LoginCache
     // 获取用户信息
     public static function getUserByUserToken($token){
         $redisConfig = config('database.redis.default');
-        $prefix = $redisConfig['prefix'] ?? 'universal_database_';
+        $prefix = env('prefix', null) ?? 'universal_database_';
         $redis = new Client($redisConfig);
         $key = $prefix . self::getTokenHead() . $token;
         return json_decode($redis->get( $key), true);
@@ -24,7 +25,7 @@ class LoginCache
         $user = self::getUserByUserToken($token);
 
         $redisConfig = config('database.redis.default');
-        $prefix = $redisConfig['prefix'] ?? 'universal_database_';
+        $prefix = env('prefix', null) ?? 'universal_database_';
         $redis = new Client($redisConfig);
 
         $tKey = $prefix . self::getTokenHead() . $token;
@@ -38,7 +39,7 @@ class LoginCache
     }
     public static function getUserToken($userKey){
         $redisConfig = config('database.redis.default');
-        $prefix = $redisConfig['prefix'] ?? 'universal_database_';
+        $prefix = env('prefix', null) ?? 'universal_database_';
         $redis = new Client($redisConfig);
         $key = $prefix . self::getUserTokenHead();
         return $redis->hget($key, $userKey);
