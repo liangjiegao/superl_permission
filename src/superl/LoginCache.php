@@ -16,7 +16,7 @@ class LoginCache
 //        $redisConfig = self::getEnv($token);
 //        $prefix = $redisConfig['prefix'];
 //        $redis = new Client($redisConfig);
-        $key = self::getTokenHead() . $token;
+        $key = self::getTokenHead($token) . $token;
         return json_decode(Redis::get( $key), true);
     }
     // token延期
@@ -28,7 +28,7 @@ class LoginCache
 //        $prefix = $redisConfig['prefix'];
 //        $redis = new Client($redisConfig);
 
-        $tKey = self::getTokenHead() . $token;
+        $tKey = self::getTokenHead($token) . $token;
 
         $re = Redis::setex($tKey,  self::TOKEN_TIME, json_encode($user));
         if (!$re){

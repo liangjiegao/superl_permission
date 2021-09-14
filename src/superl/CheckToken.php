@@ -56,13 +56,12 @@ class CheckToken
         }
     }
     public function changeRedisConnect($token){
-        \Config::set('database.redis.default.prefix', 'universal_database_');
         $list = explode('_', $token);
         if (count($list) === 1){
             return;
         }
         if ($list[0] === 'mc'){
-            \Config::set('database.redis.default.prefix', 'yiyu_mc_php_database_mcgl_');
+            \Config::set('database.redis.default.prefix', env('MC_REDIS_PREFIX'));
             \Config::set('database.redis.default.host', env('MC_REDIS_HOST'));
             \Config::set('database.redis.default.password', env('MC_REDIS_PASSWORD'));
             \Config::set('database.redis.default.port', env('MC_REDIS_PORT'));
