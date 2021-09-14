@@ -13,24 +13,24 @@ class LoginCache
 
     // 获取用户信息
     public static function getUserByUserToken($token){
-//        $redisConfig = self::getEnv($token);
-//        $prefix = $redisConfig['prefix'];
-//        $redis = new Client($redisConfig);
-        $key = self::getTokenHead($token) . $token;
-        return json_decode(Redis::get( $key), true);
+        $redisConfig = config('database.redis.default');
+        $prefix = self::getPrefix($token) ;
+        $redis = new Client($redisConfig);
+        $key = $prefix . self::getTokenHead($token) . $token;echo $key;
+        return json_decode($redis->get( $key), true);
     }
     // token延期
     public static function resetTokenRedis( $token ){
         // 获取uid
         $user = self::getUserByUserToken($token);
 
-//        $redisConfig = self::getEnv($token);
-//        $prefix = $redisConfig['prefix'];
-//        $redis = new Client($redisConfig);
+        $redisConfig = config('database.redis.default');
+        $prefix = self::getPrefix($token) ;
+        $redis = new Client($redisConfig);
 
-        $tKey = self::getTokenHead($token) . $token;
+        $tKey = $prefix . self::getTokenHead($token) . $token;
 
-        $re = Redis::setex($tKey,  self::TOKEN_TIME, json_encode($user));
+        $re = $redis->setex($tKey,  self::TOKEN_TIME, json_encode($user));
         if (!$re){
             return CodeConf::REDIS_WRITE_FAIL;
         }
@@ -46,8 +46,17 @@ class LoginCache
         }
         return $head;
     }
+    public static function getPrefix($token){
+        if (self::getEnv($token) === 'mc'){
+            $prefix = env('MC_REDIS_PREFIX');
 
-    private static function getEnv($token){
+        }else{
+            $prefix = env('REDIS_PREFIX');
+        }
+        return $prefix;
+
+    }
+    public static function getEnv($token){
         $list = explode('_', $token);
         if (count($list) === 1){
             return 'universal';

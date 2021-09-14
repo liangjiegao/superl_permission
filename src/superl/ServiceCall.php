@@ -34,6 +34,19 @@ class ServiceCall
         return $response;
     }
 
+//    public function getUser(){
+//        $env = LoginCache::getEnv($this->params['token']);
+//
+//        if ($env === 'mc'){
+//            if (env('APP_ENV') === 'local'){
+//                $url = env('mc_url') . '/user/getInfo';
+//            }
+//        }
+//        $response = Rpc::rpcGet($url, $this->params);
+//
+//        return $response;
+//    }
+
     public function setParams(array $params){
         $this->params = $params;
     }
