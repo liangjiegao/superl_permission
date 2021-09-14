@@ -3,6 +3,7 @@
 
 namespace  Superl\Permission;
 
+use Illuminate\Support\Facades\Redis;
 use Predis\Client;
 use App\Http\Config\RedisHeaderRulesConf as Rhfc;
 
@@ -12,24 +13,24 @@ class LoginCache
 
     // 获取用户信息
     public static function getUserByUserToken($token){
-        $redisConfig = self::getEnv($token);
-        $prefix = $redisConfig['prefix'];
-        $redis = new Client($redisConfig);
-        $key = $prefix . self::getTokenHead() . $token;
-        return json_decode($redis->get( $key), true);
+//        $redisConfig = self::getEnv($token);
+//        $prefix = $redisConfig['prefix'];
+//        $redis = new Client($redisConfig);
+        $key = self::getTokenHead() . $token;
+        return json_decode(Redis::get( $key), true);
     }
     // token延期
     public static function resetTokenRedis( $token ){
         // 获取uid
         $user = self::getUserByUserToken($token);
 
-        $redisConfig = self::getEnv($token);
-        $prefix = $redisConfig['prefix'];
-        $redis = new Client($redisConfig);
+//        $redisConfig = self::getEnv($token);
+//        $prefix = $redisConfig['prefix'];
+//        $redis = new Client($redisConfig);
 
-        $tKey = $prefix . self::getTokenHead() . $token;
+        $tKey = self::getTokenHead() . $token;
 
-        $re = $redis->setex($tKey,  self::TOKEN_TIME, json_encode($user));
+        $re = Redis::setex($tKey,  self::TOKEN_TIME, json_encode($user));
         if (!$re){
             return CodeConf::REDIS_WRITE_FAIL;
         }
@@ -37,11 +38,11 @@ class LoginCache
         return CodeConf::SUCCESS;
     }
     public static function getUserToken($userKey){
-        $redisConfig = self::getEnv($token);
-        $prefix = $redisConfig['prefix'];
-        $redis = new Client($redisConfig);
-        $key = $prefix . self::getUserTokenHead();
-        return $redis->hget($key, $userKey);
+//        $redisConfig = self::getEnv($token);
+//        $prefix = $redisConfig['prefix'];
+//        $redis = new Client($redisConfig);
+        $key = self::getUserTokenHead();
+        return Redis::hget($key, $userKey);
     }
 
     public static function getTokenHead(){
