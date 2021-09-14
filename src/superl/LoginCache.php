@@ -16,7 +16,7 @@ class LoginCache
         $redisConfig = config('database.redis.default');
         $prefix = self::getPrefix($token) ;
         $redis = new Client($redisConfig);
-        $key = $prefix . self::getTokenHead($token) . $token;echo $key;
+        $key = $prefix . self::getTokenHead($token) . $token;
         return json_decode($redis->get( $key), true);
     }
     // token延期
