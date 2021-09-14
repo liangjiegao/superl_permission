@@ -37,62 +37,25 @@ class LoginCache
 
         return CodeConf::SUCCESS;
     }
-    public static function getUserToken($userKey){
-//        $redisConfig = self::getEnv($token);
-//        $prefix = $redisConfig['prefix'];
-//        $redis = new Client($redisConfig);
-        $key = self::getUserTokenHead();
-        return Redis::hget($key, $userKey);
-    }
-
-    public static function getTokenHead(){
-        try {
+    public static function getTokenHead($token){
+        if (self::getEnv($token) === 'mc'){
             $head = Rhfc::getConf('userToken');
-        }catch (\Exception $e){
 
-        }
-        if (empty($head)){
+        }else{
             $head = RedisHeaderRulesConf::TOKEN_HEAD;
         }
-
         return $head;
     }
-    public static function getUserTokenHead(){
-        try {
-            $head = Rhfc::getConf('user_uid_token');
-        }catch (\Exception $e){
 
-        }
-        if (empty($head)){
-            $head = RedisHeaderRulesConf::USER_TOKEN;
-        }
-
-        return $head;
-    }
     private static function getEnv($token){
-        $data = [
-            'prefix' => 'universal_database_',
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
-        ];
-
         $list = explode('_', $token);
         if (count($list) === 1){
-            return $data;
+            return 'universal';
         }
         if ($list[0] === 'mc'){
-            $data = [
-                'prefix' => 'yiyu_mc_php_database_mcgl_',
-                'host' => env('MC_REDIS_HOST', '127.0.0.1'),
-                'password' => env('MC_REDIS_PASSWORD', null),
-                'port' => env('MC_REDIS_PORT', '6379'),
-                'database' => env('REDIS_DB', '0'),
-            ];
+            return 'mc';
         }
 
-        return $data;
+        return 'universal';
     }
 }
