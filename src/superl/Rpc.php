@@ -17,7 +17,11 @@ class Rpc
         }
         $url = substr($url, 0, strlen($url) - 1);
 
-        return json_decode(UtilsClass::curlGet($url), true);
+        $response = json_decode(UtilsClass::curlGet($url), true);
+
+        $response = self::chCode($response);
+
+        return $response;
     }
 
     public static function rpcPost(string $url, array $params){
@@ -26,4 +30,22 @@ class Rpc
         return json_decode(UtilsClass::curlPost($url, json_encode($params)));
     }
 
+    public static function chCode(array $list){
+        $result = [];
+        foreach ($list as $key => $value) {
+//            $keyCode = mb_detect_encoding($key, array("ASCII", "UTF-8", "GBK", "GB2312", "BIG5"));
+//            if ($keyCode !== "UTF-8"){
+//                $key = iconv("UTF-8", $keyCode, $key);
+//            }
+            if (is_array($value)){
+                $result[$key] = self::chCode($value);
+            }else{
+                $valueCode = mb_detect_encoding($value, array("ASCII", "UTF-8", "GBK", "GB2312", "BIG5"));
+                if ($valueCode !== "UTF-8"){
+                    $result[$key] = iconv("UTF-8", $valueCode, $value);
+                }
+            }
+        }
+        return $result;
+    }
 }
