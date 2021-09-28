@@ -19,7 +19,7 @@ class Rpc
 
         $response = json_decode(UtilsClass::curlGet($url), true);
 
-        $response = self::chCode($response);
+//        $response = self::chCode($response);
 
         return $response;
     }
