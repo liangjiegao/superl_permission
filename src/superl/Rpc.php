@@ -43,6 +43,8 @@ class Rpc
                 $valueCode = mb_detect_encoding($value, array("ASCII", "UTF-8", "GBK", "GB2312", "BIG5"));
                 if ($valueCode !== "UTF-8"){
                     $result[$key] = iconv("UTF-8", $valueCode, $value);
+                }else{
+                    $result[$key] = $value;
                 }
             }
         }
