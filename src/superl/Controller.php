@@ -14,7 +14,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public static function paramsFilter(array $formatList, Request $request, Service $service){
-        $resultTemp = ['code' => CodeConf::SUCCESS, 'result' => []];
+        $resultTemp = ['code' => CodeConf::SUCCESS, 'result' => [], 'ex_param' => ''];
         $userInfo = $request->input('user');
         if (!is_array($userInfo)){
             $userInfo = DB::table('user') -> where(['uid' => $userInfo])  -> first() ;
@@ -75,6 +75,7 @@ class Controller extends BaseController
                 }
 
                 $resultTemp['code'] = CodeConf::PARAM_EMPTY;
+                $resultTemp['ex_param'] = $inputParam;
                 return $resultTemp;
 
             }
@@ -85,10 +86,13 @@ class Controller extends BaseController
                     if (!is_string($getParam) && !is_int($getParam)){
 
                         $resultTemp['code'] = CodeConf::PARAM_TYPE_ERROR;
+                        $resultTemp['ex_param'] = $inputParam;
                         return $resultTemp;
                     }
                     if ($length !== 0 && mb_strlen($getParam) > $length){
                         $resultTemp['code'] = CodeConf::PARAM_OVER_LENGTH;
+                        $resultTemp['ex_param'] = $inputParam;
+
                         return $resultTemp;
                     }
                     break;
@@ -97,6 +101,8 @@ class Controller extends BaseController
                     $getParam = !is_array($getParam) ? json_decode($getParam, true) : $getParam;
                     if (!is_array($getParam)){
                         $resultTemp['code'] = CodeConf::PARAM_TYPE_ERROR;
+                        $resultTemp['ex_param'] = $inputParam;
+
                         return $resultTemp;
                     }
                     break;
