@@ -25,9 +25,9 @@ class Rpc
 
         $t = $tEnd - $tStart;
 
-        if ($t > 200){
+//        if ($t > 200){
             UtilsClass::log($url . '耗费：' . $t . 'ms', 'rpc_time');
-        }
+//        }
 //        $response = self::chCode($response);
 
         return $response;
