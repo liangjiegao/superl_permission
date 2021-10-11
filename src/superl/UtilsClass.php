@@ -7,6 +7,35 @@ namespace Superl\Permission;
 class UtilsClass
 {
     /**
+     * 写入日志
+     * @param $content string 内容
+     * @param $filename string 文件名
+     * @param string $type
+     * @param bool $isName
+     * @return bool
+     */
+    public static function log($content, $filename, $type = 'info', $isName = true) {
+        $logPath = dirname(dirname(dirname(__FILE__))).'/Logs/';
+
+        if( !file_exists($logPath) ){
+            mkdir($logPath, 0777);
+            chmod($logPath, 0777);
+        }
+
+        if(is_array($content) || is_object($content)){
+            $content = json_encode($content,JSON_UNESCAPED_UNICODE);
+        }
+
+        if ($isName) {
+            $log_file = $logPath . $filename . "-" . date("Ymd") . ".log";
+        } else {
+            $log_file = $logPath . $filename . "-" . ".log";
+        }
+        $date = date("Y-m-d H:i:s");
+        return file_put_contents($log_file, $date . " [$type] " . $content . "\n", FILE_APPEND);
+    }
+
+    /**
      * 发送get请求
      * @param string $url 链接
      * @return bool|mixed
@@ -70,5 +99,10 @@ class UtilsClass
 
         return $obj;
     }
+    public static function msectime() {
+        list($msec, $sec) = explode(' ', microtime());
+        $msectime = (float)sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
 
+        return $msectime;
+    }
 }

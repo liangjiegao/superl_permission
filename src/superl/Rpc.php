@@ -17,8 +17,17 @@ class Rpc
         }
         $url = substr($url, 0, strlen($url) - 1);
 
+        $tStart = UtilsClass::msectime();
+
         $response = json_decode(UtilsClass::curlGet($url), true);
 
+        $tEnd = UtilsClass::msectime();
+
+        $t = $tEnd - $tStart;
+
+        if ($t > 200){
+            UtilsClass::log($url . '耗费：' . $t . 'ms', 'rpc_time');
+        }
 //        $response = self::chCode($response);
 
         return $response;
