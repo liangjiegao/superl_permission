@@ -39,7 +39,7 @@ class LoginCache
     }
     public static function getTokenHead($token){
         if (self::getEnv($token) === 'mc'){
-            $head = Rhfc::getConf('userToken');
+            $head = RedisHeaderRulesConf::UID_TOKEN;
 
         }else{
             $head = RedisHeaderRulesConf::TOKEN_HEAD;

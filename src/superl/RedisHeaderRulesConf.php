@@ -14,8 +14,9 @@ namespace Superl\Permission;
 class RedisHeaderRulesConf
 {
     const USER_TOKEN = 'user_token';
-    const TOKEN_HEAD = 'token_head';  // token的前缀
-    const PERMISSION = 'permission';  // 权限
+    const UID_TOKEN = 'uid_token_';     // 苗场项目专用
+    const TOKEN_HEAD = 'token_head';   // token的前缀
+    const PERMISSION = 'permission';   // 权限
     const ROLE = 'role';  // 角色
 
 }
