@@ -5,7 +5,6 @@ namespace  Superl\Permission;
 
 use Illuminate\Support\Facades\Redis;
 use Predis\Client;
-use App\Http\Config\RedisHeaderRulesConf as Rhfc;
 
 class LoginCache
 {
