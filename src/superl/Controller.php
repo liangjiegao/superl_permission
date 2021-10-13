@@ -19,6 +19,7 @@ class Controller extends BaseController
         if (!is_array($userInfo)){
             $userInfo = DB::table('user') -> where(['uid' => $userInfo])  -> first() ;
             $userInfo = UtilsClass::objectToArray($userInfo);
+            $request['user'] = $userInfo;
         }
 
         $result = [];
