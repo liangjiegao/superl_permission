@@ -30,41 +30,61 @@ class CheckToken
 
         $request['user'] = $user;
 
+        $this->envChange($request->input('token'));
+
         $response = $next($request);
 
         return $response;
     }
 
+    private function envChange($token){
+        $_REQUEST['USER_DOMAIN'] = env('USER_DOMAIN', 'http://127.0.0.1');
+
+        $list = explode('_', $token);
+        if (count($list) === 1){
+            return;
+        }
+        if ($list[0] === 'mc'){
+            if ($list[1] === 'boao'){
+                $prefix = 'BOAO';
+                $this->changeMCDBConnect($prefix);
+                $this->changeMCRedisConnect($prefix);
+                $this->changeMCOutDomain();
+            }elseif($list[1] === 'lutai'){
+                $prefix = 'LUTAI';
+                $this->changeMCDBConnect($prefix);
+                $this->changeMCRedisConnect($prefix);
+                $this->changeMCOutDomain();
+            }elseif($list[1] === 'test'){
+                $prefix = 'TEST';
+                $this->changeMCDBConnect( $prefix);
+                $this->changeMCRedisConnect( $prefix);
+                $this->changeMCOutDomain();
+            }
+
+        }
+    }
+
     private function checkUserToken($token){
-        $this->changeDBConnect($token);
-        $this->changeRedisConnect($token);
         $user = LoginCache::getUserByUserToken($token);
         return $user;
     }
 
-    public function changeDBConnect($token){
-        $list = explode('_', $token);
-        if (count($list) === 1){
-            return;
-        }
-        if ($list[0] === 'mc'){
-            \Config::set('database.connections.mysql.database', env('MC_DB_DATABASE'));
-            \Config::set('database.connections.mysql.username', env('MC_DB_USERNAME'));
-            \Config::set('database.connections.mysql.password', env('MC_DB_PASSWORD'));
-            \Config::set('database.connections.mysql.host', env('MC_DB_HOST'));
-            \Config::set('database.connections.mysql.port', env('MC_DB_PORT'));
-        }
+    public function changeMCDBConnect($prefix){
+        \Config::set('database.connections.mysql.database', env($prefix . '_DB_DATABASE'));
+        \Config::set('database.connections.mysql.username', env($prefix . '_DB_USERNAME'));
+        \Config::set('database.connections.mysql.password', env($prefix . '_DB_PASSWORD'));
+        \Config::set('database.connections.mysql.host', env($prefix . '_DB_HOST'));
+        \Config::set('database.connections.mysql.port', env($prefix . '_DB_PORT'));
     }
-    public function changeRedisConnect($token){
-        $list = explode('_', $token);
-        if (count($list) === 1){
-            return;
-        }
-        if ($list[0] === 'mc'){
-            \Config::set('database.redis.default.prefix', env('MC_REDIS_PREFIX'));
-            \Config::set('database.redis.default.host', env('MC_REDIS_HOST'));
-            \Config::set('database.redis.default.password', env('MC_REDIS_PASSWORD'));
-            \Config::set('database.redis.default.port', env('MC_REDIS_PORT'));
-        }
+    public function changeMCRedisConnect($prefix){
+        \Config::set('database.redis.default.prefix',   env($prefix . '_REDIS_PREFIX'));
+        \Config::set('database.redis.default.host',     env($prefix . '_REDIS_HOST'));
+        \Config::set('database.redis.default.password', env($prefix . '_REDIS_PASSWORD'));
+        \Config::set('database.redis.default.port',     env($prefix . '_REDIS_PORT'));
+    }
+
+    public function changeMCOutDomain(){
+        $_REQUEST['USER_DOMAIN'] = env('MC_DOMAIN', 'http://127.0.0.1');
     }
 }
