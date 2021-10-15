@@ -5,6 +5,7 @@ namespace Superl\Permission;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class CheckToken
 {
@@ -19,6 +20,8 @@ class CheckToken
      */
     public function handle(Request $request, Closure $next)
     {
+        $this->envChange($request->input('token'));
+
         $user = $this->checkUserToken($request->input('token', ''));
         if (empty($user)){
             $response = new Response();
@@ -30,7 +33,6 @@ class CheckToken
 
         $request['user'] = $user;
 
-        $this->envChange($request->input('token'));
 
         $response = $next($request);
 
