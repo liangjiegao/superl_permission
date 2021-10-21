@@ -51,17 +51,17 @@ class CheckToken
                 $prefix = 'BOAO';
                 $this->changeMCDBConnect($prefix);
                 $this->changeMCRedisConnect($prefix);
-                $this->changeMCOutDomain();
+                $this->changeMCOutDomain($prefix);
             }elseif($list[1] === 'lutai'){
                 $prefix = 'LUTAI';
                 $this->changeMCDBConnect($prefix);
                 $this->changeMCRedisConnect($prefix);
-                $this->changeMCOutDomain();
+                $this->changeMCOutDomain($prefix);
             }elseif($list[1] === 'test'){
                 $prefix = 'TEST';
                 $this->changeMCDBConnect( $prefix);
                 $this->changeMCRedisConnect( $prefix);
-                $this->changeMCOutDomain();
+                $this->changeMCOutDomain($prefix);
             }
 
         }
@@ -86,7 +86,7 @@ class CheckToken
         \Config::set('database.redis.default.port',     env($prefix . '_REDIS_PORT'));
     }
 
-    public function changeMCOutDomain(){
-        $_REQUEST['USER_DOMAIN'] = env('MC_DOMAIN', 'http://127.0.0.1');
+    public function changeMCOutDomain($prefix){
+        $_REQUEST['USER_DOMAIN'] = env($prefix . '_MC_DOMAIN', 'http://127.0.0.1');
     }
 }
