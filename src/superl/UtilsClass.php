@@ -105,4 +105,107 @@ class UtilsClass
 
         return $msectime;
     }
+
+    /**
+     * 根据规则，过滤不需要的数据字段
+     * @param array $data    数据源
+     * @param array $rules   过滤规则
+     *
+     * eg：
+     * data的json数据格式：
+     * {
+            "list":[
+                {
+     *              "user":{
+                        "nickname":"superl",
+     *                  "cars":[
+     *                      {
+                                "name":"保时捷",
+     *                          ”price“:"300w"
+     *                      }
+     *                  ]
+     *              }
+     *          },
+     *          {
+     *              "user":{
+                        "nickname":"Kobe",
+     *                  "cars":[
+     *                      {
+                                "name":"奔驰",
+     *                          ”price“:"300w"
+     *                      }
+     *                  ]
+     *              }
+     *          }
+     *      ]
+     * }
+     *
+     * rules数据格式
+     * [
+     *      "list[].user.nickname",       // 去除list数组中每一个元素的user下的nickname字段
+     *      "list[0].user.nickname",       // 去除list数组中第一个素下的user下的nickname字段
+     *      "list[0].user.nickname",       // 去除list数组中第一个素下的user下的cars字段
+     * ]
+     *
+     */
+    private function unsetFields(array &$data, array $rules){
+        foreach ($rules as $rule) {
+            // 解析规则， 得到的第一个是本次需要用到的字段，第二个是递归要用的子规则
+            $fields = explode('.', $rule, 2);
+            // 没有符合的，结束
+            if (empty($fields)){
+                continue;
+            }
+
+            // 获取第一个符合的规则
+            $field = $fields[0];
+
+            // 判断是不是数组
+            preg_match('[\[(.*)\]]', $field, $matches);
+            // 数组
+            if (!empty($matches)){
+                // 字段
+                $f = str_replace($matches[0], '', $field);
+
+                // 数据中没有这个字段，结束处理
+                if (!isset($data[$f])){
+                    continue;
+                }
+
+                $index = $matches[1];                               // 下标
+
+                // 如果整个数组
+                if ($index === ''){
+                    // 如果没有后续字段，结束处理
+                    if (!isset($fields[1])){
+                        continue;
+                    }
+                    // 递归处理整个数据的每一个元素
+                    foreach ($data[$f] as &$v) {
+                        $this->unsetFields($v, [$fields[1]]);
+                    }
+                    break;
+                }
+                // 如果只拿数据的某个元素
+                else{
+                    if (!isset($data[$f][$index])){
+                        continue;
+                    }
+                    if (isset($fields[1])){
+                        $this->unsetFields($data[$f][$index], [$fields[1]]);
+                    }else{
+                        unset($data[$f][$index]);
+                    }
+                }
+
+            }else{  // 普通字段
+                if (isset($fields[1])){
+                    $this->unsetFields($data[$field], [$fields[1]]);
+                }else{
+                    unset($data[$field]);
+                }
+            }
+        }
+    }
+
 }
